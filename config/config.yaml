@@ -1,0 +1,53 @@
+# Runtime parameters — loaded separately from the static manifest and passed
+# as Graph(config=...). The static manifest (name/version/class/requires)
+# lives in config/agent.yaml; only runtime-tunable values belong here.
+
+max_retry: 3
+timeout_seconds: 30
+memory_enabled: false
+hitl:
+  enabled: false
+database:
+  engine: sqlite
+  path_secret_key: DEALS_DB_PATH
+  table: deals
+column_map: {}
+scoring:
+  weights:
+    phase: 0.35
+    amount: 0.25
+    recency: 0.2
+    bant: 0.2
+  phase_scores:
+    lead: 0.1
+    qualified: 0.3
+    proposal: 0.5
+    negotiation: 0.75
+    won: 1.0
+    lost: 0.0
+  amount_ceiling: 100000000
+  recency_horizon_days: 90
+stagnation_days: 14
+routing_table:
+- min_score: 0.7
+  stagnant: true
+  priority: P1-urgent
+- min_score: 0.7
+  stagnant: null
+  priority: P2-high
+- min_score: 0.4
+  stagnant: true
+  priority: P2-high
+- min_score: 0.4
+  stagnant: null
+  priority: P3-normal
+- min_score: 0.0
+  stagnant: null
+  priority: P4-low
+llm:
+  provider: anthropic
+  model: claude-sonnet-5
+  api_key_secret: ANTHROPIC_API_KEY
+  max_deals: 20
+  temperature: 0.0
+low_coverage_flag_ratio: 0.4
